@@ -21,13 +21,15 @@ class LoginAppDelegate: UIResponder, UIApplicationDelegate {
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     let window = UIWindow(frame: UIScreen.main.bounds)
-		let testRepository: TestRepositoryInterface = TestRepository()
-		let testUseCase: TestUseCaseInterface = TestUseCase(testRepository: testRepository)
-		let testViewModel = TestViewModel(testUseCase: testUseCase)
-    window.rootViewController = TestViewController(testViewModel: testViewModel)
+//		let testRepository: TestRepositoryInterface = TestRepository()
+//		let testUseCase: TestUseCaseInterface = TestUseCase(testRepository: testRepository)
+//		let testViewModel = TestViewModel(testUseCase: testUseCase)
+//    window.rootViewController = TestViewController(testViewModel: testViewModel)
+
+		window.rootViewController = LoginViewController()
     window.makeKeyAndVisible()
     self.window = window
     return true
-  }
+	}
 }
 

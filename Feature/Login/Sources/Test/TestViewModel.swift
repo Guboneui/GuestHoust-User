@@ -16,7 +16,7 @@ public final class TestViewModel {
 	private let testUseCase: TestUseCaseInterface
 	private let disposeBag: DisposeBag
 	
-	public var userGender: BehaviorRelay<String> = .init(value: "")
+	public var userGender: BehaviorRelay<String> = .init(value: "kuhgkhjhk")
 	
 	public init(testUseCase: TestUseCaseInterface) {
 		self.testUseCase = testUseCase
@@ -25,8 +25,9 @@ public final class TestViewModel {
 	
 	public func testViewModelMethod() {
 		testUseCase.testUseCaseMethod()
-			.subscribe(with: self) { owner, genter in
-				owner.userGender.accept(genter)
+			.subscribe { [weak self] genter in
+				guard let self else { return }
+				self.userGender.accept(genter)
 			}.disposed(by: disposeBag)
 	}
 }

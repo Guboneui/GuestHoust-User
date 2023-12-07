@@ -55,7 +55,7 @@ public class DefaultTextField: UIView {
 			case .password:
 				return "비밀번호"
 			case .name:
-				return "김동겸"
+				return "이름을 입력해주세요"
 			case .custom:
 				return ""
 			}

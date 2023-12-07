@@ -15,7 +15,7 @@ import Then
 
 public class TestViewController: UIViewController {
 
-	private let titleLabel: UILabel = UILabel()
+	private let titleButton: UIButton = UIButton()
 
 	private let testViewModel: TestViewModel
 	private let disposeBag: DisposeBag
@@ -38,9 +38,9 @@ public class TestViewController: UIViewController {
 		// MARK: - 뷰모델 메소드 호출
 		testViewModel.testViewModelMethod()
 		
-		testViewModel.userGender
-			.bind(to: titleLabel.rx.text)
-			.disposed(by: disposeBag)
+//		testViewModel.userGender
+//			.bind(to: titleLabel.rx.text)
+//			.disposed(by: disposeBag)
 	}
 
 	private func setupViews() {
@@ -48,14 +48,26 @@ public class TestViewController: UIViewController {
 	}
 
 	private func setupSubViews() {
-		view.addSubview(titleLabel)
+		view.addSubview(titleButton)
 
 		setupLayouts()
+		
+		
+		titleButton.rx.tap
+			.throttle(.milliseconds(300), latest: false, scheduler: MainScheduler.instance)
+			.bind { [weak self] in
+				print("BUTTON")
+				
+			}.disposed(by: disposeBag)
+		
+		
+		
 	}
 
 	private func setupLayouts() {
-		titleLabel.snp.makeConstraints { make in
+		titleButton.snp.makeConstraints { make in
 			make.center.equalToSuperview()
+			make.size.equalTo(100)
 		}
 	}
 }
