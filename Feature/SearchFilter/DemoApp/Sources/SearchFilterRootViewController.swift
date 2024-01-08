@@ -66,6 +66,7 @@ private extension SearchFilterRootViewController {
 			.bind { [weak self] in
 				guard let self else { return }
 				let filterSearchViewController = SearchFilterViewController()
+				filterSearchViewController.reactor = SearchFilterViewReactor()
 				let navigation = UINavigationController(rootViewController: filterSearchViewController)
 				navigation.modalPresentationStyle = .overFullScreen
 				navigation.navigationBar.isHidden = true
