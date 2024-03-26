@@ -1,5 +1,5 @@
 //
-//  ChattingView.swift
+//  ChatRoomView.swift
 //  ChattingDemoApp
 //
 //  Created by 구본의 on 2023/12/28.
@@ -7,7 +7,6 @@
 
 import UIKit
 
-import DesignSystem
 import ResourceKit
 import UtilityKit
 
@@ -16,7 +15,7 @@ import RxSwift
 import SnapKit
 import Then
 
-final class ChattingRoomView: UIView {
+final class ChatRoomView: UIView {
 	// MARK: - METRIC
 	private enum Metric {
 		static let animateWithDuration: TimeInterval = 0.5
@@ -29,8 +28,8 @@ final class ChattingRoomView: UIView {
 		static let addPhotoMenuButtonBottomMargin: CGFloat = 11
 		
 		static let addPhotoMenuViewWidth: CGFloat = 60
-		static let cameraButtonBottomMargin: CGFloat = 11
-		static let galleryButtonLeftMargin: CGFloat = 12
+		static let galleryButtonBottomMargin: CGFloat = 11
+		static let cameraButtonLeftMargin: CGFloat = 12
 		
 		static let messageInputViewCornerRadius: CGFloat = 20
 		static let inputMessageTextViewMinHeight: CGFloat = 30.333333333333332
@@ -45,29 +44,19 @@ final class ChattingRoomView: UIView {
 	}
 	
 	// MARK: - UI Property
-	private let chattingRoomCollectionViewLayout: UICollectionViewCompositionalLayout = {
-		let itemSize = NSCollectionLayoutSize(
-			widthDimension: .fractionalWidth(1),
-			heightDimension: .estimated(1)
-		)
-		
-		let item = NSCollectionLayoutItem(layoutSize: itemSize)
-		
-		let groupSize = NSCollectionLayoutSize(
-			widthDimension: .fractionalWidth(1),
-			heightDimension: .estimated(30)
-		)
-		
-		let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-		
-		let section = NSCollectionLayoutSection(group: group)
-		
-		return UICollectionViewCompositionalLayout(section: section)
+	public let navigationBarView: ChatRoomNavigationBar = ChatRoomNavigationBar()
+	
+	private let compositionalLayout: UICollectionViewCompositionalLayout = {
+		var listConfiguration = UICollectionLayoutListConfiguration(appearance: .plain)
+		listConfiguration.showsSeparators = false
+		listConfiguration.backgroundColor = AppTheme.Color.neutral50
+		let compositionalLayout = UICollectionViewCompositionalLayout.list(using: listConfiguration)
+		return compositionalLayout
 	}()
 	
-	public lazy var chattingRoomCollectionView: UICollectionView = UICollectionView(
+	public lazy var chatListCollectionView: UICollectionView = UICollectionView(
 		frame: .zero,
-		collectionViewLayout: chattingRoomCollectionViewLayout
+		collectionViewLayout: compositionalLayout
 	).then {
 		$0.backgroundColor = AppTheme.Color.neutral50
 		$0.register(
@@ -82,9 +71,10 @@ final class ChattingRoomView: UIView {
 			ChatByOwnerCell.self,
 			forCellWithReuseIdentifier: ChatByOwnerCell.identifier
 		)
+		$0.contentInset = UIEdgeInsets(top: 60, left: 0, bottom: 0, right: 0)
 	}
 	
-	private let chattingRoomBottomView: UIView = UIView().then {
+	private let chatRoomBottomView: UIView = UIView().then {
 		$0.backgroundColor = AppTheme.Color.white
 	}
 	
@@ -101,20 +91,22 @@ final class ChattingRoomView: UIView {
 		$0.backgroundColor = AppTheme.Color.white
 	}
 	
-	private let cameraButton: UIButton = UIButton().then {
+	fileprivate let cameraButton: UIButton = UIButton().then {
 		$0.setImage(AppTheme.Image.useCamera, for: .normal)
 		$0.tintColor = AppTheme.Color.neutral900
 	}
 	
-	private let galleryButton: UIButton = UIButton().then {
+	fileprivate let galleryButton: UIButton = UIButton().then {
 		$0.setImage(AppTheme.Image.selectPhoto, for: .normal)
 		$0.tintColor = AppTheme.Color.neutral900
 	}
 	
 	private let messageInputView: UIView = UIView().then {
 		$0.backgroundColor = AppTheme.Color.neutral50
-		$0.makeCornerRadius(Metric.messageInputViewCornerRadius)
-		$0.makeBorder()
+		$0.makeCornerRadiusWithBorder(
+			Metric.messageInputViewCornerRadius,
+			borderColor: AppTheme.Color.neutral100
+		)
 	}
 	
 	fileprivate let inputMessageTextView: UITextView = UITextView().then {
@@ -195,30 +187,20 @@ final class ChattingRoomView: UIView {
 		}
 		self.inputMessageTextView.isScrollEnabled = false
 	}
-	
-	public func scollingBottom() {
-		self.chattingRoomCollectionView.setContentOffset(
-			CGPoint(
-				x: 0,
-				y: self.chattingRoomCollectionView.contentSize.height
-				- self.chattingRoomCollectionView.bounds.height
-			),
-			animated: true
-		)
-	}
 }
 
 // MARK: - Viewable METHOD
-extension ChattingRoomView: Viewable {
+extension ChatRoomView: Viewable {
 	func setupConfigures() {
 		backgroundColor = AppTheme.Color.white
 	}
 	
 	func setupViews() {
-		addSubview(chattingRoomCollectionView)
-		addSubview(chattingRoomBottomView)
-		
-		chattingRoomBottomView.addSubview(bottomStackView)
+		addSubview(chatListCollectionView)
+		addSubview(chatRoomBottomView)
+		addSubview(navigationBarView)
+
+		chatRoomBottomView.addSubview(bottomStackView)
 		
 		addPhotoMenuButtonView.addSubview(addPhotoMenuButton)
 		
@@ -232,13 +214,18 @@ extension ChattingRoomView: Viewable {
 	}
 	
 	func setupConstraints() {
-		chattingRoomCollectionView.snp.makeConstraints { make in
+		navigationBarView.snp.makeConstraints { make in
 			make.top.equalToSuperview()
 			make.horizontalEdges.equalToSuperview()
-			make.bottom.equalTo(chattingRoomBottomView.snp.top)
 		}
 		
-		chattingRoomBottomView.snp.makeConstraints { make in
+		chatListCollectionView.snp.makeConstraints { make in
+			make.top.equalToSuperview()
+			make.horizontalEdges.equalToSuperview()
+			make.bottom.equalTo(chatRoomBottomView.snp.top)
+		}
+		
+		chatRoomBottomView.snp.makeConstraints { make in
 			make.horizontalEdges.equalToSuperview()
 			make.bottom.equalTo(keyboardLayoutGuide.snp.top)
 		}
@@ -262,15 +249,15 @@ extension ChattingRoomView: Viewable {
 			make.width.equalTo(Metric.addPhotoMenuViewWidth)
 		}
 		
-		cameraButton.snp.makeConstraints { make in
-			make.bottom.equalToSuperview().inset(Metric.cameraButtonBottomMargin)
+		galleryButton.snp.makeConstraints { make in
+			make.bottom.equalToSuperview().inset(Metric.galleryButtonBottomMargin)
 			make.leading.equalToSuperview()
 			make.size.equalTo(Metric.defaultButtinSize)
 		}
 		
-		galleryButton.snp.makeConstraints { make in
-			make.centerY.equalTo(cameraButton)
-			make.leading.equalTo(cameraButton.snp.trailing).offset(Metric.galleryButtonLeftMargin)
+		cameraButton.snp.makeConstraints { make in
+			make.centerY.equalTo(galleryButton)
+			make.leading.equalTo(galleryButton.snp.trailing).offset(Metric.cameraButtonLeftMargin)
 			make.size.equalTo(Metric.defaultButtinSize)
 		}
 		
@@ -292,7 +279,7 @@ extension ChattingRoomView: Viewable {
 }
 
 // MARK: - Reactive Extension
-extension Reactive where Base: ChattingRoomView {
+extension Reactive where Base: ChatRoomView {
 	var didTapSendMessageButton: ControlEvent<Void> {
 		let source = base.sendMessageButton.rx.touchHandler()
 		return ControlEvent(events: source)
@@ -303,8 +290,18 @@ extension Reactive where Base: ChattingRoomView {
 		return ControlEvent(events: source)
 	}
 	
-	var didTapChattingRoomCollectionView: ControlEvent<Void> {
-		let source = base.chattingRoomCollectionView.rx.tapGesture().when(.recognized).map { _ in }
+	var didTapCameraButton: ControlEvent<Void> {
+		let source = base.cameraButton.rx.touchHandler()
+		return ControlEvent(events: source)
+	}
+	
+	var didTapGalleryButton: ControlEvent<Void> {
+		let source = base.galleryButton.rx.touchHandler()
+		return ControlEvent(events: source)
+	}
+	
+	var didTapChatListCollectionView: ControlEvent<Void> {
+		let source = base.chatListCollectionView.rx.tapGesture().when(.recognized).map { _ in }
 		return ControlEvent(events: source)
 	}
 	

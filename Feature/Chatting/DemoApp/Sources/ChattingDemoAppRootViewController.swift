@@ -8,6 +8,8 @@
 import UIKit
 
 import Chatting
+import ChattingData
+import ChattingDomain
 import ResourceKit
 
 import RxCocoa
@@ -45,9 +47,17 @@ final class ChattingDemoAppRootViewController: UIViewController {
 		moveToChatButton.rx.tap
 			.bind { [weak self] in
 				guard let self else { return }
-				let viewModel: ChattingRoomViewModelInterface = ChattingRoomViewModel()
-				let chattingViewController: ChattingRoomViewController =
-				ChattingRoomViewController(chattingRoomViewModel: viewModel)
+				let repository: ChatRepositoryInterface = ChatRepository()
+				let trepository: TestTokenRespositoryInterface = TestTokenRespository()
+				let useCase: ChatUseCaseInterface = ChatUseCase(
+					chatRepository: repository,
+					testTokenRespository: trepository
+				)
+				
+				let viewModel: ChannelListViewModelInterface = ChannelListViewModel(useCase: useCase)
+				let chattingViewController: ChannelListViewController = 
+				ChannelListViewController(channelListViewModel: viewModel)
+				
 				chattingViewController.modalPresentationStyle = .overFullScreen
 				self.present(chattingViewController, animated: true)
 			}.disposed(by: disposeBag)

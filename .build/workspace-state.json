@@ -9,13 +9,13 @@
           "location" : "https://github.com/Guboneui/NaverMap-SPM",
           "name" : "NMapsMap"
         },
-        "path" : "/Users/gubon-ui/Desktop/GuestHoust-User/.build/artifacts/navermap-spm/NMapsGeometry/NMapsGeometry.framework/framework/NMapsGeometry.xcframework",
+        "path" : "/Users/gubon-ui/Desktop/GuestHoust-User/.build/artifacts/navermap-spm/NMapsMap/framework/NMapsMap.xcframework",
         "source" : {
-          "checksum" : "41cb10080f2f152711c796a22132d3f5b6d124fc1d28d16dd6e3f59beed78d63",
+          "checksum" : "1ad233a0bd2a5ffb4a83e34279be73b721e3f2940f82bccaf86619b3d368da27",
           "type" : "remote",
-          "url" : "https://github.com/Guboneui/NMapsGeometry-Framework/releases/download/v1.0.1/NMapsGeometry.framework.zip"
+          "url" : "https://github.com/navermaps/NMapsMap/releases/download/release%2F3.17.0/NMapsMap.framework.zip"
         },
-        "targetName" : "NMapsGeometry"
+        "targetName" : "NMapsMap"
       },
       {
         "kind" : "xcframework",
@@ -25,13 +25,13 @@
           "location" : "https://github.com/Guboneui/NaverMap-SPM",
           "name" : "NMapsMap"
         },
-        "path" : "/Users/gubon-ui/Desktop/GuestHoust-User/.build/artifacts/navermap-spm/NMapsMap/framework/NMapsMap.xcframework",
+        "path" : "/Users/gubon-ui/Desktop/GuestHoust-User/.build/artifacts/navermap-spm/NMapsGeometry/NMapsGeometry.framework/framework/NMapsGeometry.xcframework",
         "source" : {
-          "checksum" : "1ad233a0bd2a5ffb4a83e34279be73b721e3f2940f82bccaf86619b3d368da27",
+          "checksum" : "41cb10080f2f152711c796a22132d3f5b6d124fc1d28d16dd6e3f59beed78d63",
           "type" : "remote",
-          "url" : "https://github.com/navermaps/NMapsMap/releases/download/release%2F3.17.0/NMapsMap.framework.zip"
+          "url" : "https://github.com/Guboneui/NMapsGeometry-Framework/releases/download/v1.0.1/NMapsGeometry.framework.zip"
         },
-        "targetName" : "NMapsMap"
+        "targetName" : "NMapsGeometry"
       }
     ],
     "dependencies" : [

@@ -19,7 +19,7 @@ final class ChatByOwnerCell: UICollectionViewCell {
 	private enum Metric {
 		static let messageBubbleViewCornerRadius: CGFloat = 12
 		static let messageBubbleViewRightMargin: CGFloat = 12
-		static let messageBubbleViewBottomMargin: CGFloat = 4
+		static let messageBubbleViewBottomMargin: CGFloat = 8
 		
 		static let messageLabelNumberOfLines: Int = 0
 		static let messageLabelVerticalMargin: CGFloat = 8
@@ -44,7 +44,7 @@ final class ChatByOwnerCell: UICollectionViewCell {
 		$0.lineBreakMode = .byCharWrapping
 	}
 	
-	private let timeLabel: UILabel = UILabel().then {
+	public let timeLabel: UILabel = UILabel().then {
 		$0.font = AppTheme.Font.Regular_10
 		$0.textColor = AppTheme.Color.neutral900
 		$0.setContentCompressionResistancePriority(
